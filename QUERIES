@@ -1,0 +1,61 @@
+-- QUERIES 
+
+-- Listar todos os clientes
+SELECT * FROM CLIENTE;
+
+-- Listar todas as peças em estoque
+SELECT descricao, fabricante, quantidade_estoque FROM PECA;
+
+
+-- Veículos com ano acima de 2015
+SELECT * FROM VEICULO WHERE ano > 2015;
+
+-- Valor total em estoque de cada peça (quantidade * valor)
+
+SELECT 
+    descricao, 
+    valor_unitario, 
+    quantidade_estoque, 
+    (valor_unitario * quantidade_estoque) AS valor_total_estoque
+FROM PECA;
+
+-- Serviços mais realizados (ordenados por quantidade de vezes em OS)
+
+SELECT 
+    s.descricao,
+    COUNT(oss.id_servico) AS quantidade_realizada
+FROM SERVICO s
+LEFT JOIN OS_SERVICO oss ON s.id_servico = oss.id_servico
+GROUP BY s.id_servico
+ORDER BY quantidade_realizada DESC;
+
+SELECT 
+    c.nome,
+    COUNT(v.id_veiculo) AS quantidade_veiculos
+FROM CLIENTE c
+JOIN VEICULO v ON c.id_cliente = v.id_cliente
+GROUP BY c.id_cliente
+HAVING quantidade_veiculos >=1;
+
+
+
+-- Análise de Estoque vs Utilização de Peças
+
+SELECT 
+    p.descricao,
+    p.fabricante,
+    p.quantidade_estoque AS estoque_atual,
+    COALESCE(SUM(op.quantidade), 0) AS quantidade_utilizada_mes,
+    p.quantidade_estoque / NULLIF(COALESCE(SUM(op.quantidade), 1), 0) AS meses_estoque,
+    CASE 
+        WHEN p.quantidade_estoque < 5 THEN 'CRÍTICO'
+        WHEN p.quantidade_estoque < 10 THEN 'ALERTA'
+        ELSE 'OK'
+    END AS status_estoque
+FROM PECA p
+LEFT JOIN OS_PECA op ON p.id_peca = op.id_peca
+LEFT JOIN ORDEM_DE_SERVICO os ON op.id_os = os.id_os 
+    AND os.data_abertura >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+GROUP BY p.id_peca
+ORDER BY meses_estoque, status_estoque;
+

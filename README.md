@@ -5,7 +5,7 @@ Este projeto foi desenvolvido como parte do desafio da DIO com o objetivo de cri
 
 O sistema foi projetado para gerenciar clientes, veículos, ordens de serviço, mecânicos e peças em estoque. O fluxo principal começa quando um cliente agenda um serviço, gerando uma ordem de serviço (OS) que é atribuída a um mecânico. Conforme os serviços são realizados e peças utilizadas, o sistema atualiza automaticamente o valor total da OS e o estoque disponível.
 
-O banco de dados foi estruturado seguindo princípios de normalização para evitar redundâncias, com chaves primárias e estrangeiras bem definidas. Além da criação das tabelas, foram implementados triggers para cálculos automáticos e atualização de estoque, garantindo a integridade dos dados.
+O banco de dados foi estruturado seguindo princípios de normalização para evitar redundâncias, com chaves primárias e estrangeiras bem definidas. 
 
 Foram desenvolvidas consultas SQL avançadas para fornecer insights valiosos, como análise financeira mensal, desempenho dos mecânicos, controle de estoque e identificação de clientes mais frequentes. Essas queries utilizam junções complexas, agregações, filtros com HAVING e atributos derivados para transformar dados brutos em informações acionáveis.
 

@@ -1,0 +1,23 @@
+INSERT INTO CLIENTE (nome, cpf, telefone, email, endereco, data_cadastro) VALUES
+('João Silva', '123.456.789-01', '(11) 9999-8888', 'joao@email.com', 'Rua A, 123', CURDATE()),
+('Maria Souza', '987.654.321-09', '(11) 7777-6666', 'maria@email.com', 'Av B, 456', CURDATE());
+
+INSERT INTO VEICULO (id_cliente, marca, modelo, ano, placa, quilometragem) VALUES
+(1, 'Fiat', 'Uno', 2015, 'ABC-1234', 85000),
+(2, 'Volkswagen', 'Gol', 2018, 'DEF-5678', 45000);
+
+INSERT INTO MECANICO (nome, cpf, telefone, especialidade, data_contratacao) VALUES
+('Carlos Mendes', '111.222.333-44', '(11) 5555-4444', 'Motor', '2020-01-15'),
+('Ana Paula', '555.666.777-88', '(11) 3333-2222', 'Elétrica', '2021-03-10');
+
+INSERT INTO SERVICO (descricao, tempo_medio, valor) VALUES
+('Troca de óleo', '00:30:00', 80.00),
+('Alinhamento e balanceamento', '01:00:00', 120.00),
+('Revisão completa', '02:30:00', 350.00),
+('Troca de pastilhas de freio', '00:45:00', 150.00);
+
+INSERT INTO PECA (descricao, fabricante, valor_unitario, quantidade_estoque) VALUES
+('Óleo motor 5W30', 'Petrobras', 45.00, 20),
+('Pastilha de freio dianteira', 'Bosch', 120.00, 15),
+('Filtro de ar', 'Mann Filter', 35.00, 30),
+('Vela de ignição', 'NGK', 25.00, 40);

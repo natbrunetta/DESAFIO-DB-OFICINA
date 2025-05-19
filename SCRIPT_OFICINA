@@ -1,0 +1,97 @@
+-- Criação do banco de dados OFICINA
+
+CREATE DATABASE IF NOT EXISTS oficina_mecanica;
+USE oficina_mecanica;
+
+-- Tabela CLIENTE
+CREATE TABLE CLIENTE (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    telefone VARCHAR(15),
+    email VARCHAR(100),
+    endereco VARCHAR(200),
+    data_cadastro DATE NOT NULL
+);
+
+-- Tabela VEICULO
+CREATE TABLE VEICULO (
+    id_veiculo INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    ano INT,
+    placa VARCHAR(10) UNIQUE NOT NULL,
+    quilometragem INT,
+    FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente)
+);
+
+-- Tabela MECANICO
+CREATE TABLE MECANICO (
+    id_mecanico INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    telefone VARCHAR(15),
+    especialidade VARCHAR(50) NOT NULL,
+    data_contratacao DATE NOT NULL
+);
+
+-- Tabela SERVICO
+CREATE TABLE SERVICO (
+    id_servico INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(100) NOT NULL,
+    tempo_medio TIME NOT NULL,
+    valor DECIMAL(10,2) NOT NULL
+);
+
+-- Tabela PECA
+CREATE TABLE PECA (
+    id_peca INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(100) NOT NULL,
+    fabricante VARCHAR(50),
+    valor_unitario DECIMAL(10,2) NOT NULL,
+    quantidade_estoque INT NOT NULL DEFAULT 0
+);
+
+-- Tabela ORDEM_DE_SERVICO
+CREATE TABLE ORDEM_DE_SERVICO (
+    id_os INT AUTO_INCREMENT PRIMARY KEY,
+    id_veiculo INT NOT NULL,
+    data_abertura DATETIME NOT NULL,
+    data_conclusao DATETIME,
+    status ENUM('Aberta', 'Concluída', 'Cancelada') DEFAULT 'Aberta',
+    valor_total DECIMAL(10,2) DEFAULT 0,
+    observacoes TEXT,
+    FOREIGN KEY (id_veiculo) REFERENCES VEICULO(id_veiculo)
+);
+
+-- Tabela de relacionamento entre OS e MECANICO (N:M)
+CREATE TABLE OS_MECANICO (
+    id_os INT NOT NULL,
+    id_mecanico INT NOT NULL,
+    PRIMARY KEY (id_os, id_mecanico),
+    FOREIGN KEY (id_os) REFERENCES ORDEM_DE_SERVICO(id_os),
+    FOREIGN KEY (id_mecanico) REFERENCES MECANICO(id_mecanico)
+);
+
+-- Tabela de relacionamento entre OS e SERVICO (N:M)
+CREATE TABLE OS_SERVICO (
+    id_os INT NOT NULL,
+    id_servico INT NOT NULL,
+    quantidade INT DEFAULT 1,
+    valor_unitario DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (id_os, id_servico),
+    FOREIGN KEY (id_os) REFERENCES ORDEM_DE_SERVICO(id_os),
+    FOREIGN KEY (id_servico) REFERENCES SERVICO(id_servico)
+);
+
+-- Tabela de relacionamento entre OS e PECA (N:M)
+CREATE TABLE OS_PECA (
+    id_os INT NOT NULL,
+    id_peca INT NOT NULL,
+    quantidade INT NOT NULL,
+    valor_unitario DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (id_os, id_peca),
+    FOREIGN KEY (id_os) REFERENCES ORDEM_DE_SERVICO(id_os),
+    FOREIGN KEY (id_peca) REFERENCES PECA(id_peca)
+);
